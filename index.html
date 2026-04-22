@@ -1266,6 +1266,7 @@ function renderSDebPanel() {
     var t = talents.find(function(x){ return x.id===ob.talentId; });
     if (!t) return '';
     var portLabel = (t.portfolio||'').indexOf('instagram')>-1 ? 'Instagram' : 'Portfolio';
+    var oid = ob.id;
     return '<tr>' +
       '<td style="min-width:160px;">' +
         '<div class="ob-name">'+esc(t.name)+'</div>' +
@@ -1275,10 +1276,36 @@ function renderSDebPanel() {
       '</td>' +
       '<td style="width:130px;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#FF10F0;padding:4px 10px;border:1px solid #FF10F0;background:rgba(255,16,240,0.08);display:inline-block;">Save for Deb</div></td>' +
       '<td style="width:100px;"><div class="ob-date-added">Added</div><div class="ob-date">'+esc(ob.dateAdded||'')+'</div></td>' +
-      '<td style="width:160px;text-align:center;"><button class="ob-remove" data-obid="'+ob.id+'" onclick="removeFromDeb(this)">Remove from Deb</button></td>' +
+      '<td style="min-width:220px;">' +
+        '<div class="ob-notes-wrap">' +
+          '<div class="ob-note-chips" id="sdeb-chips-'+oid+'"></div>' +
+          '<input class="ob-note-in" id="sdeb-obn-'+oid+'" data-obid="'+oid+'" type="text" placeholder="Add a note..." onkeydown="handleOBKey(event,this)">' +
+          '<button class="ob-note-btn" data-obid="'+oid+'" onclick="addOBNoteById(this)">+ Note</button>' +
+        '</div>' +
+      '</td>' +
+      '<td style="width:160px;text-align:center;"><button class="ob-remove" data-obid="'+oid+'" onclick="removeFromDeb(this)">Remove from Deb</button></td>' +
     '</tr>';
   }).join('');
-  el.innerHTML = '<table class="ob-table"><thead><tr><th>Designer</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
+  el.innerHTML = '<table class="ob-table"><thead><tr><th>Designer</th><th>Status</th><th>Date</th><th>Notes</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
+  /* render existing note chips — setTimeout ensures DOM elements exist first */
+  setTimeout(function(){
+    debs.forEach(function(ob){
+      renderSDebNotes(ob.id, ob.obNotes||[]);
+    });
+  }, 0);
+}
+
+function renderSDebNotes(obId, notes) {
+  var el = document.getElementById('sdeb-chips-'+obId);
+  if (!el) return;
+  el.innerHTML = '';
+  (notes||[]).forEach(function(n){
+    var d = document.createElement('div');
+    d.className = 'ob-note-chip';
+    d.innerHTML = '<span style="flex:1;font-size:11px;color:var(--gray-5);">'+esc(n.text)+'</span>' +
+      '<button class="ob-chip-del" data-obid="'+obId+'" data-nid="'+n.id+'" onclick="delOBNoteById(this)">×</button>';
+    el.appendChild(d);
+  });
 }
 
 function removeFromDeb(el) {
@@ -1406,9 +1433,11 @@ function renderOB() {
     '</table>';
 
   /* render notes chips */
-  outbound.forEach(function(ob){
-    renderOBNotes(ob.id, ob.obNotes||[]);
-  });
+  setTimeout(function(){
+    outbound.forEach(function(ob){
+      renderOBNotes(ob.id, ob.obNotes||[]);
+    });
+  }, 0);
 }
 
 function updateOBCount() {
@@ -2067,7 +2096,8 @@ function igQuickAdd() {
 
 function addOBNoteById(el) {
   var obId = el.dataset.obid;
-  var inp = document.getElementById('obn-'+obId);
+  /* input could be in outbound table or sdeb table */
+  var inp = document.getElementById('obn-'+obId) || document.getElementById('sdeb-obn-'+obId);
   if (!inp || !inp.value.trim()) return;
   var ob = outbound.find(function(o){ return o.id===obId; });
   if (!ob) return;
@@ -2076,6 +2106,7 @@ function addOBNoteById(el) {
   inp.value = '';
   saveOB();
   renderOBNotes(obId, ob.obNotes);
+  renderSDebNotes(obId, ob.obNotes);
 }
 
 function delOBNoteById(el) {
@@ -2086,6 +2117,7 @@ function delOBNoteById(el) {
   ob.obNotes = (ob.obNotes||[]).filter(function(n){ return n.id!==noteId; });
   saveOB();
   renderOBNotes(obId, ob.obNotes);
+  renderSDebNotes(obId, ob.obNotes);
 }
 
 function setDavidR(id, val, optEl) {
