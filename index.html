@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Creative Database · Radish World</title>
+<title>Creative Database · radish World</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -679,7 +679,7 @@ body {
 <!-- ══ LOCK ══ -->
 <div id="lock-screen">
   <div class="lock-header">
-    <span class="lock-wordmark">Radish World LLC</span>
+    <span class="lock-wordmark">radish World LLC</span>
     <span class="lock-meta">Internal · Creative Database</span>
   </div>
   <div class="lock-center">
@@ -699,7 +699,7 @@ body {
   <!-- HEADER -->
   <div class="hdr">
     <div class="hdr-left">
-      <div class="hdr-brand">Radish · Creative DB</div>
+      <div class="hdr-brand">radish · Creative DB</div>
       <div class="hdr-divider"></div>
       <div class="hdr-tag">Graphic Designers</div>
     </div>
@@ -734,7 +734,7 @@ body {
     <div class="stat">
       <div class="stat-lbl">Status</div>
       <div class="stat-n blue" style="font-size:12px;font-weight:700;letter-spacing:0;margin-top:5px;">Active Search</div>
-      <div class="stat-sub">Radish Recruits</div>
+      <div class="stat-sub">radish Recruits</div>
     </div>
   </div>
 
@@ -1101,6 +1101,7 @@ function mkCard(t, idx){
           '<div class="r-pair deb-wrap">' +
           '<div class="deb-popover">' +
             '<div class="deb-opt'+(t.rating==1?' chosen':'')+'" onclick="event.stopPropagation();setDavidR(\''+t.id+'\',1,this)">1</div>' +
+            '<div class="deb-opt'+(t.rating==1.5?' chosen':'')+'" onclick="event.stopPropagation();setDavidR(\''+t.id+'\',1.5,this)">1.5</div>' +
             '<div class="deb-opt'+(t.rating==2?' chosen':'')+'" onclick="event.stopPropagation();setDavidR(\''+t.id+'\',2,this)">2</div>' +
             '<div class="deb-opt'+(t.rating==2.5?' chosen':'')+'" onclick="event.stopPropagation();setDavidR(\''+t.id+'\',2.5,this)">2.5</div>' +
             '<div class="deb-opt'+(t.rating==3?' chosen':'')+'" onclick="event.stopPropagation();setDavidR(\''+t.id+'\',3,this)">3</div>' +
@@ -1111,7 +1112,9 @@ function mkCard(t, idx){
           '<div class="r-pair deb-wrap">' +
           '<div class="deb-popover">' +
             '<div class="deb-opt'+(debR==1?' chosen':'')+'" onclick="event.stopPropagation();setDebR(\''+t.id+'\',1,this)">1</div>' +
+            '<div class="deb-opt'+(debR==1.5?' chosen':'')+'" onclick="event.stopPropagation();setDebR(\''+t.id+'\',1.5,this)">1.5</div>' +
             '<div class="deb-opt'+(debR==2?' chosen':'')+'" onclick="event.stopPropagation();setDebR(\''+t.id+'\',2,this)">2</div>' +
+            '<div class="deb-opt'+(debR==2.5?' chosen':'')+'" onclick="event.stopPropagation();setDebR(\''+t.id+'\',2.5,this)">2.5</div>' +
             '<div class="deb-opt'+(debR==3?' chosen':'')+'" onclick="event.stopPropagation();setDebR(\''+t.id+'\',3,this)">3</div>' +
           '</div>' +
           '<div class="r-circle rc-deb" title="Hover to rate">' +
@@ -1287,7 +1290,6 @@ function renderSDebPanel() {
     '</tr>';
   }).join('');
   el.innerHTML = '<table class="ob-table"><thead><tr><th>Designer</th><th>Status</th><th>Date</th><th>Notes</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
-  /* render existing note chips — setTimeout ensures DOM elements exist first */
   setTimeout(function(){
     debs.forEach(function(ob){
       renderSDebNotes(ob.id, ob.obNotes||[]);
@@ -1337,6 +1339,7 @@ function delOBNote(obId, noteId) {
   ob.obNotes = (ob.obNotes||[]).filter(function(n){ return n.id!==noteId; });
   saveOB();
   renderOBNotes(obId, ob.obNotes);
+  renderSDebNotes(obId, ob.obNotes);
 }
 
 function renderOBNotes(obId, notes) {
@@ -1559,6 +1562,7 @@ function openDet(id){
         '<div class="dp-r-block deb-wrap" style="position:relative;">' +
         '<div class="deb-popover" style="bottom:calc(100% + 8px);">' +
           '<div class="deb-opt'+(t.rating==1?' chosen':'')+'" onclick="setDavidR(\''+t.id+'\',1,this)">1</div>' +
+          '<div class="deb-opt'+(t.rating==1.5?' chosen':'')+'" onclick="setDavidR(\''+t.id+'\',1.5,this)">1.5</div>' +
           '<div class="deb-opt'+(t.rating==2?' chosen':'')+'" onclick="setDavidR(\''+t.id+'\',2,this)">2</div>' +
           '<div class="deb-opt'+(t.rating==2.5?' chosen':'')+'" onclick="setDavidR(\''+t.id+'\',2.5,this)">2.5</div>' +
           '<div class="deb-opt'+(t.rating==3?' chosen':'')+'" onclick="setDavidR(\''+t.id+'\',3,this)">3</div>' +
@@ -1569,7 +1573,9 @@ function openDet(id){
         '<div class="dp-r-block deb-wrap" style="position:relative;">' +
         '<div class="deb-popover" style="bottom:calc(100% + 8px);">' +
           '<div class="deb-opt'+(debR==1?' chosen':'')+'" onclick="setDebR(\''+t.id+'\',1,this)">1</div>' +
+          '<div class="deb-opt'+(debR==1.5?' chosen':'')+'" onclick="setDebR(\''+t.id+'\',1.5,this)">1.5</div>' +
           '<div class="deb-opt'+(debR==2?' chosen':'')+'" onclick="setDebR(\''+t.id+'\',2,this)">2</div>' +
+          '<div class="deb-opt'+(debR==2.5?' chosen':'')+'" onclick="setDebR(\''+t.id+'\',2.5,this)">2.5</div>' +
           '<div class="deb-opt'+(debR==3?' chosen':'')+'" onclick="setDebR(\''+t.id+'\',3,this)">3</div>' +
         '</div>' +
         '<div class="dp-r-circle dp-r-deb" title="Hover to rate Deb">' +
@@ -1914,7 +1920,7 @@ function shareCandidate(id) {
   var t = talents.find(function(x){ return x.id===id; });
   if (!t) return;
   var lines = [
-    'Radish Creative DB',
+    'radish Creative DB',
     t.name + (t.role ? ' - ' + t.role : ''),
     t.location && t.location !== 'Unknown' ? 'Location: ' + t.location : '',
     (t.discs&&t.discs.length) ? 'Disciplines: ' + t.discs.join(', ') : '',
@@ -2096,7 +2102,6 @@ function igQuickAdd() {
 
 function addOBNoteById(el) {
   var obId = el.dataset.obid;
-  /* input could be in outbound table or sdeb table */
   var inp = document.getElementById('obn-'+obId) || document.getElementById('sdeb-obn-'+obId);
   if (!inp || !inp.value.trim()) return;
   var ob = outbound.find(function(o){ return o.id===obId; });
