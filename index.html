@@ -686,7 +686,7 @@ body {
     <div class="lock-eyebrow"><span class="lock-dot"></span>Graphic Designers · Active Search</div>
     <div class="lock-title">Creative<br>Database</div>
     <div class="lock-form">
-      <input class="fi" type="password" id="pw-in" placeholder="Enter password" autocomplete="off">
+      <input class="fi" type="password" id="pw-in" placeholder="Enter password" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly')">
       <button class="lock-btn" onclick="chkPw()">Enter →</button>
       <div class="lock-err" id="pw-err">Incorrect password</div>
     </div>
@@ -2213,6 +2213,8 @@ function confirmDelete(el) {
 
 /* INIT */
 load();
+/* Clear password field on load — prevents browser autofill from pre-populating */
+window.addEventListener("load", function(){ var p = document.getElementById("pw-in"); if(p) p.value = ""; });
 loadOB();
 updateSDebCount();
 </script>
